@@ -112,7 +112,7 @@ deploy-service: deploy-libs #deploy-cfg
 	mkdir -p $(SERVICE_DIR)/tmp
 	chmod 777 $(SERVICE_DIR)/tmp
 	mkdir -p $(SERVICE_DIR)/conf
-	cp conf/rdp-config.ini $(SERVICE_DIR)/conf
+	#cp conf/rdp-config.ini $(SERVICE_DIR)/conf
 	$(TPAGE) $(TPAGE_ARGS) service/start_service.tt > $(SERVICE_DIR)/start_service
 	chmod +x $(SERVICE_DIR)/start_service
 	$(TPAGE) $(TPAGE_ARGS) service/stop_service.tt > $(SERVICE_DIR)/stop_service
