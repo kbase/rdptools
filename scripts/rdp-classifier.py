@@ -5,11 +5,11 @@ import ctypes
 import subprocess
 import os
 from optparse import OptionParser
+from tempfile import mkstemp
+import json
 
 def classifySeqs(seqfile, cmdoptions):
 	#Putting fasta file into a dictionary of lists
-	input_seqs = []
-	results = []
 	for seq in SeqIO.parse(seqfile, "fasta"):		
 		Sequence = {'seqid': seq.description, 'bases': str(seq.seq)}
 	input_seqs.append(Sequence)
@@ -26,15 +26,33 @@ def classifySeqs(seqfile, cmdoptions):
 	for k in hierResults:
 		print k
 
-def classifyFiles(seqfile, cmdoptions):
+def classifyFiles(seqfiles, cmdoptions):
 	#calling the classify service, and storing the return in results
-	#sys.path.append("/Users/wangqion/Desktop/KBase/workshop2014/deployment/lib")
+
+	# 
+	# Here we upload the given file to the handle service, parse
+	# the JSON output of the handle service uploader, and 
+	# pass that to the classify call.
+	#
+	fd, tempFile = mkstemp()
+
+	handles = []
+
+	for seqfile in seqfiles:
+		args = ["kbhs-upload", "-i", seqfile, "-o", tempFile]
+		print args
+		subprocess.check_call(args)
+		fh = file(tempFile)
+		h = json.load(fh)
+		handles.append(h)
+		fh.close
+
 	from biokbase.RDPTools.client import RDPTools
 	service = RDPTools()
-	results = service.classify(seqfile, cmdoptions)
+	detailHandle, hierHandle = service.classify(handles, cmdoptions)
 
-	for k in results:
-		print k	
+	print detailHandle
+	print hierHandle
 				
 			
 def main(args):
@@ -70,17 +88,17 @@ def main(args):
 	
 	print "cmdoption %s \n" %(cmdoptions)
 	
-	for seqfile in args:
-		classifySeqs(seqfile, cmdoptions)
+	#for seqfile in args:
+		#classifySeqs(seqfile, cmdoptions)
 		
 	inputfiles = []
-	#for seqfile in args:
-	#	if os.path.exists(seqfile):
-	#		inputfiles.append(os.path.abspath(seqfile))
-	#	else:
-	#		parser.error("Input seq file does not exists: " + seqfile);	
+	for seqfile in args:
+		if os.path.exists(seqfile):
+			inputfiles.append(os.path.abspath(seqfile))
+		else:
+			parser.error("Input seq file does not exists: " + seqfile);	
 
-	#classifyFiles(inputfiles, cmdoptions)
+	classifyFiles(inputfiles, cmdoptions)
 	
 if __name__ == "__main__":
 	main(sys.argv[1:])
