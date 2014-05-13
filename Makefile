@@ -103,9 +103,7 @@ test: test-client test-scripts test-service
 
 deploy-client: deploy-libs deploy-scripts deploy-docs
 
-deploy-scripts:
-	$(foreach src, $(SRC_PYTHON), $(WRAP_PYTHON_SCRIPT) $(TARGET)/pybin/$(notdir $(src)) $(TARGET)/bin/$(basename $(notdir $(src)));)
-	$(foreach src, $(SRC_PYTHON), cp $(src) $(TARGET)/pybin;)
+deploy-scripts: deploy-python-scripts
 
 deploy-service: deploy-libs #deploy-cfg
 	mkdir -p $(SERVICE_DIR)
@@ -134,4 +132,4 @@ clean:
 	rm -rfv $(SERVICE_DIR)
 	rm -f start_service stop_service
     
-#include $(TOP_DIR)/tools/Makefile.common.rules
+include $(TOP_DIR)/tools/Makefile.common.rules
