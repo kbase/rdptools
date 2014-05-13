@@ -51,6 +51,13 @@ my $input_list = join(" ", map { "\@$_->{file_name}" } @$handle_list);
 my $jobname = "rdp-classify";
 my $user = "username";
 my $shock_url = "140.221.85.54:7044";
+
+if (@$handle_list)
+{
+    $shock_url = $handle_list->[0]->{url};
+    $shock_url =~ s,^http://,,;
+}
+
 my $project = "project";
 
 my %vars = (parameters => $params,
