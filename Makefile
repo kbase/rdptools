@@ -26,6 +26,7 @@ CLASSIFIER_MEMORY = -Xmx2g
 TPAGE_ARGS = --define kb_top=$(TARGET) \
         --define kb_runtime=$(DEPLOY_RUNTIME) \
         --define kb_service_name=$(SERVICE) \
+        --define kb_service_dir=$(SERVICE) \
         --define kb_service_port=$(SERVICE_PORT) \
 	--define mem_option=$(CLASSIFIER_MEMORY) \
         $(TPAGE_TEMPDIR)
