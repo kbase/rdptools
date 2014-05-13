@@ -14,7 +14,7 @@ use JSON::XS;
 my $template_file = "rdpclassify.awt.tt";
 if (exists $ENV{KB_SERVICE_DIR})
 {
-    $template_file = "$ENV{KB_SERVICE_DIR}/$ENV{KB_SERVICE_NAME}/$template_file";
+    $template_file = "$ENV{KB_SERVICE_DIR}/$template_file";
 }
 
 my($opt, $usage) = describe_options("%c %o input-handle-list",
