@@ -1,0 +1,37 @@
+{
+        "info": {
+            "pipeline": "awe-example",
+            "name": "[% jobname %]",
+            "project": "[% project %]",
+            "user": "[% user %]",
+            "clientgroups":"kbase",
+            "noretry": true
+        }, 
+        "tasks": [
+            {
+                "cmd": {
+                    "args": "[% parameters %] -o [% jobname %].classified -h [% jobname %].hierarchical [% input_list %]",
+                    "description": "show", 
+                    "name": "awe_rdpclassify"
+                }, 
+                "dependsOn": [], 
+                "inputs": {
+[% FOR handle IN handles %]
+                   "[% handle.file_name %]": {
+                        "host": "[% handle.url %]",
+                        "node": "[% handle.id %]"
+                    } [%- "," IF NOT loop.last %]
+[% END %]		    
+                }, 
+                "outputs": {
+                    "[% jobname %].classified": {
+                        "host": "http://[% shockurl %]"
+                    },
+		    "[% jobname %].hierarchical": {
+                        "host": "http://[% shockurl %]"
+                    }
+                },
+                "taskid": "0"
+            }
+        ]
+    }
