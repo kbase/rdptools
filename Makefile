@@ -20,10 +20,14 @@ ifdef TEMPDIR
 TPAGE_TEMPDIR = --define kb_tempdir=$(TEMPDIR)
 endif
 
+
+CLASSIFIER_MEMORY = -Xmx2g
+
 TPAGE_ARGS = --define kb_top=$(TARGET) \
         --define kb_runtime=$(DEPLOY_RUNTIME) \
         --define kb_service_name=$(SERVICE) \
         --define kb_service_port=$(SERVICE_PORT) \
+	--define mem_option=$(CLASSIFIER_MEMORY) \
         $(TPAGE_TEMPDIR)
 
 #note: requires full development container to work
@@ -101,11 +105,15 @@ test-service:
 
 test: test-client test-scripts test-service
 
-deploy-client: deploy-libs deploy-scripts deploy-docs
+deploy-client: deploy-libs deploy-java-libs deploy-scripts deploy-docs
 
-deploy-scripts: deploy-python-scripts
+deploy-scripts: deploy-python-scripts deploy-java-wrapper
 
-deploy-service: deploy-libs #deploy-cfg
+deploy-java-wrapper:
+	$(TPAGE) $(TPAGE_ARGS) scripts/awe_rdpclassify.tt > $(TARGET)/bin/awe_rdpclassify
+	chmod a+rx $(TARGET)/bin/awe_rdpclassify
+
+deploy-service: compile-typespec | deploy-libs deploy-java-libs
 	mkdir -p $(SERVICE_DIR)
 	mkdir -p $(SERVICE_DIR)/tmp
 	chmod 777 $(SERVICE_DIR)/tmp
@@ -121,12 +129,10 @@ deploy: deploy-client
 deploy-docs:
 	mkdir -p $(SERVICE_DIR)/webroot
 
-deploy-libs: compile-typespec
+deploy-java-libs: build-java-libs
 	rsync -arv RDPTools/*.jar $(TARGET)/lib
 	mkdir -p $(TARGET)/lib/lib
 	rsync -arv RDPTools/lib/*.jar $(TARGET)/lib/lib
-	rsync -arv lib/. $(TARGET)/lib/.
-	#cp lib/*.py $(TARGET)/lib
 
 clean:
 	rm -rfv $(SERVICE_DIR)
