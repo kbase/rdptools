@@ -15,6 +15,7 @@ export TMPDIR=[% kb_tempdir %]
 [% END %]
 
 pid_file=$KB_SERVICE_DIR/service.pid
+log_file=$KB_SERVICE_DIR/error.log
 
 #exec $KB_RUNTIME/bin/perl $KB_RUNTIME/bin/starman --listen :[% kb_service_port %] --pid $pid_file $KB_TOP/lib/[% kb_psgi %] --error-log $KB_SERVICE_DIR/error.log --workers 20 
 
@@ -25,6 +26,6 @@ PORT=[% kb_service_port %]
 DIR="$KB_TOP/lib"
 
 cd $DIR
-python RDPToolsServer.py --port=$PORT  &
+python RDPToolsServer.py --port=$PORT > $log_file 2>&1  &
 echo $! > $pid_file
 
