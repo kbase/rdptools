@@ -1,0 +1,4 @@
+#![% kb_runtime %]/bin/perl -w
+
+!system ("[% kb_runtime %]/java/bin/java", "[% mem_option %]", "-jar", "[% kb_top %]/lib/classifier.jar", "classify", @ARGV)
+  or die " could not run classifier.jar";
