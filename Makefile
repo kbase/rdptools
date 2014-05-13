@@ -103,8 +103,6 @@ test: test-client test-scripts test-service
 
 deploy-client: deploy-libs deploy-scripts deploy-docs
 
-deploy-scripts: deploy-python-scripts
-
 deploy-service: deploy-libs #deploy-cfg
 	mkdir -p $(SERVICE_DIR)
 	mkdir -p $(SERVICE_DIR)/tmp
@@ -115,6 +113,7 @@ deploy-service: deploy-libs #deploy-cfg
 	chmod +x $(SERVICE_DIR)/start_service
 	$(TPAGE) $(TPAGE_ARGS) service/stop_service.tt > $(SERVICE_DIR)/stop_service
 	chmod +x $(SERVICE_DIR)/stop_service
+	cp workflow/rdpclassify.awt.tt $(SERVICE_DIR)/rdpclassify.awt.tt
 
 deploy: deploy-client
 

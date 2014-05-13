@@ -96,6 +96,9 @@ module RDPTools {
 	funcdef classifySeqs(list<Sequence> seqs, list<string> options) returns (list<ClassifierResult> results, list<string> hierResults);
 	funcdef classify(list<Handle> files, list<string> options) returns (Handle detailedResults, Handle hierResults);
 	
+	funcdef classify_submit(list<Handle> files, list<string> options) returns (string jobId);
+	funcdef classify_check(string jobId) returns (string status, Handle detailedResults, Handle hierResults);
+	
 	/*
 	calling ProbeMatch with the default reference file or without reference file
 	*/

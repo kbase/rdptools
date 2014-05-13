@@ -1,0 +1,4 @@
+#group-name rdptools RDP Commands
+rdp-classifier	rdptools
+rdp-probematch	rdptools
+rdp-seqmatch	rdptools

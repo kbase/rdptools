@@ -7,6 +7,7 @@ import os
 from optparse import OptionParser
 from tempfile import mkstemp
 import json
+import time
 
 def classifySeqs(seqfile, cmdoptions):
 	#Putting fasta file into a dictionary of lists
@@ -49,10 +50,20 @@ def classifyFiles(seqfiles, cmdoptions):
 
 	from biokbase.RDPTools.client import RDPTools
 	service = RDPTools()
-	detailHandle, hierHandle = service.classify(handles, cmdoptions)
 
-	print detailHandle
-	print hierHandle
+	jobid = service.classify_submit(handles, cmdoptions)
+	print "got jobid ", jobid
+
+#	detailHandle, hierHandle = service.classify(handles, cmdoptions)
+
+	while 1:
+		status, detailHandle, hierHandle = service.classify_check(jobid)
+		print "status=", status
+		if status == 'completed':
+			print detailHandle
+			print hierHandle
+			break
+		time.sleep(1)
 				
 			
 def main(args):
