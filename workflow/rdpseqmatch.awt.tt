@@ -1,0 +1,41 @@
+{
+	"info": {
+            "pipeline": "awe-example",
+            "name": "[% jobname %]",
+            "project": "[% project %]",
+            "user": "[% user %]",
+            "clientgroups":"kbase",
+            "noretry": true
+        },
+	"tasks": [
+	    {
+                "cmd": {
+                    "args": "[% parameters %] [% ref_file %] [% query_file %]",
+                    "description": "show",
+                    "name": "awe_rdpseqmatch"[%- "," IF token %]
+[% IF token %]
+                    "environ": {
+                        "private": {"KB_AUTH_TOKEN":"[% token %]"}
+                    }
+[% END %]
+                },
+                "dependsOn": [],
+                "inputs": {
+                    "[% ref_handle.file_name %]": {
+                        "host": "[% ref_handle.url %]",
+                        "node": "[% ref_handle.id %]"
+                    },
+                    "[% query_handle.file_name %]": {
+                        "host": "[% query_handle.url %]",
+                        "node": "[% query_handle.id %]"
+                    }
+                },
+                "outputs": {
+                    "[% output_file %]": {
+                        "host": "http://[% shockurl %]"
+                    }
+                },
+                "taskid": "0"
+            }
+	]
+    }

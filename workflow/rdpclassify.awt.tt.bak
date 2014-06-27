@@ -7,65 +7,86 @@
             "clientgroups":"kbase",
             "noretry": true
         }, 
-        "tasks":[[% FOR handle IN handles %]
+        "tasks": [
+[% FOR handle IN handles %]
             {
                 "cmd": {
-                    "args": "[% parameters %] -o [% jobname %]_[% loop.index %].classified -h [% jobname %]_[% loop.index %].hier [% handle.file_name %]",
-                    "description": "RDP's classifier", 
-                    "name": "awe_rdpclassify"
+                    "args": "[% parameters %] -o [% handle.file_name %].classified -h [% handle.file_name %].hierarchical @[% handle.file_name %]",
+                    "description": "process file #[% loop.count %]", 
+                    "name": "awe_rdpclassify"[%- "," IF token %]
+[% IF token %]
+                    "environ": {
+                        "private": {"KB_AUTH_TOKEN":"[% token %]"}
+                    }
+[% END %]
                 }, 
                 "dependsOn": [], 
                 "inputs": {
                    "[% handle.file_name %]": {
                         "host": "[% handle.url %]",
                         "node": "[% handle.id %]"
-                   }		    
+                    } 
                 }, 
                 "outputs": {
-                    "[% jobname %]_[% loop.index %].classified": {
+                    "[% handle.file_name %].classified": {
                         "host": "http://[% shockurl %]"
                     },
-		    "[% jobname %]_[% loop.index %].hier": {
+		    "[% handle.file_name %].hierarchical": {
                         "host": "http://[% shockurl %]"
                     }
                 },
                 "taskid": "[% loop.index %]"
-            },[% END %]
+            },
+[% END %]
             {
                 "cmd": {
-                    "args": "[% jobname %].classified [% FOR handle IN handles %][% jobname %]_[% loop.index %].classified[%- " " IF NOT loop.last %][% END %]",
-                    "description": "combine classified files",
-                    "name": "combine_classified_files"
+                    "args": "[% jobname %] [% input_list %]",
+                    "description:": "combine classified files",
+                    "name": "combine_classified_files"[%- "," IF token %]
+[% IF token %]
+                    "environ": {
+                        "private": {"KB_AUTH_TOKEN":"[% token %]"}
+                    }
+[% END %]
                 },
                 "dependsOn": [[% FOR handle IN handles %] "[% loop.index %]"[%- "," IF NOT loop.last %] [% END %]],
-                "inputs": {[% FOR handle IN handles %]
-                    "[% jobname %]_[% loop.index %].classified": {
+                "inputs": {
+[% FOR handle IN handles %]
+                    "[% handle.file_name %].classified": {
                         "host": "http://[% shockurl %]",
                         "origin": "[% loop.index %]"
-                    }[%- "," IF NOT loop.last %][% END %]
+                    }[%- "," IF NOT loop.last %] 
+[% END %]
                 },
                 "outputs": {
                     "[% jobname %].classified": {
                         "host": "http://[% shockurl %]"
                     }
                 },
-               "taskid": "[% handles.size %]"
+                "taskid": "[% handles.size %]"
             },
             {
                 "cmd": {
-                    "args": "[% jobname %].hier [% FOR handle IN handles %][% jobname %]_[% loop.index %].hier[%- " " IF NOT loop.last %][% END %]",
-                    "description": "combine hierarchical output",
-                    "name":"awe_rdpclassifymerge"
+                    "args": "[% jobname %] [% input_list %]",
+                    "description": "combine hierarchical files",
+                    "name": "combine_hier_files"[%- "," IF token %]
+[% IF token %]
+                    "environ": {
+                        "private": {"KB_AUTH_TOKEN": "[% token %]"}
+                    }
+[% END %]
                 },
                 "dependsOn": [[% FOR handle IN handles %] "[% loop.index %]"[%- "," IF NOT loop.last %] [% END %]],
-                "inputs": {[% FOR handle IN handles %]
-                    "[% jobname %]_[% loop.index %].hier": {
+                "inputs": {
+[% FOR handle IN handles %]
+                    "[% handle.file_name %].hierarchical": {
                         "host": "http://[% shockurl %]",
                         "origin": "[% loop.index %]"
-                    }[%- "," IF NOT loop.last %][% END %] 
+                    }[%- "," IF NOT loop.last %]
+[% END %]
                 },
                 "outputs": {
-                    "[% jobname %].hier": {
+                    "[% jobname %].hierarchical": {
                         "host": "http://[% shockurl %]"
                     }
                 },

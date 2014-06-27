@@ -17,11 +17,7 @@ export TMPDIR=[% kb_tempdir %]
 pid_file=$KB_SERVICE_DIR/service.pid
 log_file=$KB_SERVICE_DIR/error.log
 
-#exec $KB_RUNTIME/bin/perl $KB_RUNTIME/bin/starman --listen :[% kb_service_port %] --pid $pid_file $KB_TOP/lib/[% kb_psgi %] --error-log $KB_SERVICE_DIR/error.log --workers 20 
-
 PORT=[% kb_service_port %]
-#DIR=/work/gilmanma/kbase/kb/deployment/lib
-#DIR=/Users/wangqion/Desktop/KBase/workshop2014/deployment/lib
 
 DIR="$KB_TOP/lib"
 

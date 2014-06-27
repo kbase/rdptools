@@ -1,0 +1,437 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:ubuntu@dolson-v25-tmp.(none)" />
+</head>
+
+<body style="background-color: white">
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="#classifySeqs">classifySeqs</a></li>
+      <li><a href="#classify">classify</a></li>
+      <li><a href="#classify_submit">classify_submit</a></li>
+      <li><a href="#classify_check">classify_check</a></li>
+      <li><a href="#probematchSeqs">probematchSeqs</a></li>
+      <li><a href="#probematch">probematch</a></li>
+      <li><a href="#probematch_submit">probematch_submit</a></li>
+      <li><a href="#probematch_check">probematch_check</a></li>
+      <li><a href="#seqmatch">seqmatch</a></li>
+      <li><a href="#seqmatch_submit">seqmatch_submit</a></li>
+      <li><a href="#seqmatch_check">seqmatch_check</a></li>
+    </ul>
+  </li>
+  <li><a href="#TYPES">TYPES</a>
+    <ul>
+      <li><a href="#Sequence">Sequence</a></li>
+      <li><a href="#Handle">Handle</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>Bio::KBase::RDPTools::Client</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module provides methods for the classifying and matching of DNA sequences.</p>
+
+<h2 id="classifySeqs">classifySeqs</h2>
+
+<pre><code>  $detailed_results, $hier_results = $obj-&gt;classifySeqs($seqs, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$seqs is a reference to a list where each element is a Sequence
+$options is a reference to a list where each element is a string
+$detailed_results is a Handle
+$hier_results is a Handle
+Sequence is a reference to a hash where the following keys are defined:
+	seqid has a value which is a string
+	bases has a value which is a string
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description">Description</dt>
+<dd>
+
+<p>calling Classifier</p>
+
+</dd>
+</dl>
+
+<h2 id="classify">classify</h2>
+
+<pre><code>  $detailed_results, $hier_results = $obj-&gt;classify($handles, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types1">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$handles is a reference to a list where each element is a string
+$options is a reference to a list where each element is a string
+$detailed_results is a Handle
+$hier_results is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description1">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="classify_submit">classify_submit</h2>
+
+<pre><code>  $jobid = $obj-&gt;classify_submit($handles, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types2">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$handles is a reference to a list where each element is a string
+$options is a reference to a list where each element is a string
+$jobid is a string</pre>
+
+</dd>
+<dt id="Description2">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="classify_check">classify_check</h2>
+
+<pre><code>  $status, $detailed_results, $hier_results = $obj-&gt;classify_check($jobid)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types3">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$jobid is a string
+$status is a string
+$detailed_results is a Handle
+$hier_results is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description3">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="probematchSeqs">probematchSeqs</h2>
+
+<pre><code>  $results = $obj-&gt;probematchSeqs($primers, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types4">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$primers is a string
+$options is a reference to a list where each element is a string
+$results is a reference to a list where each element is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description4">Description</dt>
+<dd>
+
+<p>calling ProbeMatch with the default reference file or without reference file</p>
+
+</dd>
+</dl>
+
+<h2 id="probematch">probematch</h2>
+
+<pre><code>  $results = $obj-&gt;probematch($primers, $options, $ref_file)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types5">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$primers is a string
+$options is a reference to a list where each element is a string
+$ref_file is a string
+$results is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description5">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="probematch_submit">probematch_submit</h2>
+
+<pre><code>  $jobid = $obj-&gt;probematch_submit($primers, $options, $ref_file)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types6">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$primers is a string
+$options is a reference to a list where each element is a string
+$ref_file is a string
+$jobid is a string</pre>
+
+</dd>
+<dt id="Description6">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="probematch_check">probematch_check</h2>
+
+<pre><code>  $status, $results = $obj-&gt;probematch_check($jobid)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types7">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$jobid is a string
+$status is a string
+$results is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description7">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="seqmatch">seqmatch</h2>
+
+<pre><code>  $result_handle = $obj-&gt;seqmatch($ref_file, $query_file, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types8">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$ref_file is a string
+$query_file is a string
+$options is a reference to a list where each element is a string
+$result_handle is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description8">Description</dt>
+<dd>
+
+<p>Takes as input a list of options (namely, the k nearest neighbors and the minimum sab score), the file containing reference sequences, and the file containing query sequences. It returns a list of k results per query sequence with the matching sequences.</p>
+
+</dd>
+</dl>
+
+<h2 id="seqmatch_submit">seqmatch_submit</h2>
+
+<pre><code>  $jobid = $obj-&gt;seqmatch_submit($ref_file, $query_file, $options)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types9">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$ref_file is a string
+$query_file is a string
+$options is a reference to a list where each element is a string
+$jobid is a string</pre>
+
+</dd>
+<dt id="Description9">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="seqmatch_check">seqmatch_check</h2>
+
+<pre><code>  $status, $result_handle = $obj-&gt;seqmatch_check($jobid)</code></pre>
+
+<dl>
+
+<dt id="Parameter-and-return-types10">Parameter and return types</dt>
+<dd>
+
+
+
+<pre>
+$jobid is a string
+$status is a string
+$result_handle is a Handle
+Handle is a reference to a hash where the following keys are defined:
+	file_name has a value which is a string
+	id has a value which is a string
+	type has a value which is a string
+	url has a value which is a string
+	remote_md5 has a value which is a string
+	remote_sha1 has a value which is a string</pre>
+
+</dd>
+<dt id="Description10">Description</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="TYPES">TYPES</h1>
+
+<h2 id="Sequence">Sequence</h2>
+
+<dl>
+
+<dt id="Description11">Description</dt>
+<dd>
+
+<p>A structure of representing DNA sequences.</p>
+
+<p>string seqid</p>
+
+<p>This parameter is the sequence ID. The format is an &#39;S&#39; followed by 9 numbers.</p>
+
+<p>string bases</p>
+
+<p>This parameter represents the bases in the sequence. Possible values are any combination of &#39;A&#39;, &#39;C&#39;, &#39;T&#39;, &#39;G&#39; or their lowercase equivalents.</p>
+
+</dd>
+<dt id="Definition">Definition</dt>
+<dd>
+
+
+
+<pre>
+a reference to a hash where the following keys are defined:
+seqid has a value which is a string
+bases has a value which is a string</pre>
+
+</dd>
+</dl>
+
+<h2 id="Handle">Handle</h2>
+
+<dl>
+
+<dt id="Description12">Description</dt>
+<dd>
+
+<p>Handle type taken from the handle service spec.</p>
+
+</dd>
+<dt id="Definition1">Definition</dt>
+<dd>
+
+
+
+<pre>
+a reference to a hash where the following keys are defined:
+file_name has a value which is a string
+id has a value which is a string
+type has a value which is a string
+url has a value which is a string
+remote_md5 has a value which is a string
+remote_sha1 has a value which is a string</pre>
+
+</dd>
+</dl>
+
+
+</body>
+
+</html>
+
+

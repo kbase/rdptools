@@ -1,4 +1,12 @@
 #![% kb_runtime %]/bin/perl -w
 
-!system ("[% kb_runtime %]/java/bin/java", "[% mem_option %]", "-jar", "[% kb_top %]/lib/classifier.jar", "classify", @ARGV)
+my $command = "[% kb_runtime %]/java/bin/java -jar [% kb_top %]/lib/classifier.jar classify ";
+
+foreach(@ARGV) {
+    $command = $command . $_;
+    $command = $command . ' ';
+}
+
+#!system ("[% kb_runtime %]/java/bin/java", "[% mem_option %]", "-jar", "[% kb_top %]/lib/classifier.jar", "classify", @ARGV)
+!system($command)
   or die " could not run classifier.jar";
