@@ -12,8 +12,10 @@ First deploy typecomp and make sure compile_typespec is in the
 system path.
 
 From the top level of the development container, run the command
+'''
     perl auto-deploy -module rdptools <config file>
-where <config file> will usually be bootstrap.cfg.
+'''
+where config file will usually be bootstrap.cfg.
 
 Starting/Stopping the service
 ----------

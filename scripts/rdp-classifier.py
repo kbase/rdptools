@@ -36,7 +36,7 @@ def classifier_async(handle_files, cmdoptions):
 
 args = sys.argv[1:]
 
-usage = "USAGE: %prog [options] sequence_file(s)"
+usage = "USAGE: rdp-classifier [options] sequence_file(s)"
 available_genes = ["16srrna", "fungallsu"]
 available_formats = ["allrank", "fixrank", "filterbyconf", "db"]
 
@@ -87,6 +87,9 @@ cleanup_in = False
 file_list = []
 
 if not options.input:
+    if sys.stdin.isatty():
+        parser.print_usage()
+        sys.exit(1) 
     tmp = mktemp()
     f = open(tmp, 'w')
     f.write(sys.stdin.read())

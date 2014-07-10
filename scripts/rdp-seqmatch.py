@@ -74,6 +74,9 @@ cleanup_in = False
 file_list = [options.reference]
 
 if not options.input:
+    if sys.stdin.isatty():
+        parser.print_usage()
+        sys.exit(1)
     tmp = mktemp()
     f = open(tmp, 'w')
     f.write(sys.stdin.read())
