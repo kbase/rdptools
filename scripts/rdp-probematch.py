@@ -9,14 +9,35 @@ from tempfile import mktemp
 from optparse import OptionParser
 from biokbase.RDPTools.client import RDPTools
 
+"""Run synchronously on the server-side machine
+
+params:
+   handle_files - input file names 
+                  (files formatted as Shock file handles)
+                  Note: must have primers file handle first,
+                  followed by sequence file handle
+   cmdoptions - command line options
+
+returns:
+   file handle containing SequenceMatch results 
+"""
 def probematch_sync(handle_files, cmdoptions):
     service = RDPTools()
     return service.probematch(handle_files[0], cmdoptions, handle_files[1])
 
+"""Run asynchronously using AWE
+
+params:
+   same as for probematch_sync()
+
+returns:
+   same as for probematch_sync()
+"""
 def probematch_async(handle_files, cmdoptions):
     service = RDPTools()
     try:
-        jobid = service.probematch_submit(handle_files[0], cmdoptions, handle_files[1])
+        jobid = service.probematch_submit(
+                    handle_files[0], cmdoptions, handle_files[1])
     except urllib2.URLError:
         raise SystemExit("Failed to connect to KBase server")
     except subprocess.CalledProcessError, args:
@@ -36,45 +57,56 @@ def probematch_async(handle_files, cmdoptions):
             return None
         time.sleep(1)
 
-args = sys.argv[1:]
-
-usage = ("USAGE: %prog [options] <primer_list | primer_file> seq_file\n" + 
-         "If multiple primers are used, you can either save the primers in a file with one primer per line,\n" +
-         "or enter the primers as command-line argument, separated by ',' without space" )
+usage = ("USAGE: rdp-probematch [options] <primer_list | primer_file> + " 
+         "seq_file\nIf multiple primers are used, " +
+         "you can either save the primers in a file with " + 
+         "one primer per line,\nor enter the primers as command-line " + 
+         "argument, separated by ',' without space")
 
 parser = OptionParser(usage=usage)
-parser.add_option("-n", "--max_dist", dest="max_dist", 
-                  help="maximum number of differences allowed",
-                  default="0")
-parser.add_option("--sync", action="store_true", dest="sync", 
-                  help="run synchronously",
-                  default=False)
-parser.add_option("-i", "--input", dest="input",
-                  help="read input from file (otherwise reads from STDIN)",
-                  default=None)
-parser.add_option("-p", "--primers", dest="primers",
-                  help="primer file (must be provided)")
-parser.add_option("-o", "--output", dest="output",
-                  help="save output to file (if not specified, prints to STDOUT)",
-                  default=None)
-parser.add_option("-u", "--upload", action="store_true", dest="upload",
-                  help="upload input files to Shock",
-                  default=False)
+parser.add_option(
+   "-n", "--max_dist", dest="max_dist", 
+   help="maximum number of differences allowed",
+   default="0")
+parser.add_option(
+    "--sync", action="store_true", dest="sync", 
+    help="run synchronously",
+    default=False)
+parser.add_option(
+    "-i", "--input", dest="input",
+    help="read input from file (otherwise reads from STDIN)",
+    default=None)
+parser.add_option(
+    "-p", "--primers", dest="primers",
+    help="primer file (must be provided)")
+parser.add_option(
+    "-o", "--output", dest="output",
+    help="save output to file (if not specified, prints to STDOUT)",
+    default=None)
+parser.add_option(
+    "-u", "--upload", action="store_true", dest="upload",
+    help="upload input files to Shock",
+    default=False)
 
 (options, args) = parser.parse_args()
 
+# assemble the arguments to pas to the service
 cmdoptions  = []
 if options.max_dist:
     if int(options.max_dist) < 0 :
-        parser.error("The conf value " + options.conf + " is out of range," +
-                     " should be greater than 0, recommended to be 1/10 of the length of the primer")
+        parser.error("The conf value " + options.conf + 
+                     " is out of range, should be greater than 0, " +
+                     "recommended to be 1/10 of the length of the primer")
     cmdoptions.append("-n")
     cmdoptions.append(options.max_dist)
 
+# whether to delete input files when done
+# true when files created from stdin
 cleanup_in = False
 file_list = [options.primers]
 
 if not options.input:
+    # if there is nothing in stdin, print usage and exit
     if sys.stdin.isatty():
         parser.print_usage()
         sys.exit(1)
@@ -87,6 +119,8 @@ if not options.input:
 else:
     file_list.append(options.input)
 
+# whether to delete file handles when done
+# true when the input files need to be uploaded to Shock
 cleanup_handles = options.upload
 handle_files = []
 for file_name in file_list:
@@ -114,6 +148,7 @@ if result_handle is not None:
     else:
         print json.dumps(result_handle)
 
+# remove temp files
 if cleanup_in:
     os.remove(file_list[1])
 if cleanup_handles:

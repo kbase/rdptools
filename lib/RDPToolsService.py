@@ -10,11 +10,26 @@ CONFIG_FILE = os.environ["KB_DEPLOYMENT_CONFIG"]
 SERVICE_NAME = os.environ["KB_SERVICE_NAME"]
 TEMP_DIR = "../services/RDPTools/tmp" #os.environ["SERVICE_TEMP_DIR"]
 
+'''A template for a KBase service that can be run either "locally"
+(i.e. on the KBase server, as opposed to an AWE client) or on an
+AWE client
+
+This is an "abstract" class template that is meant to be inherited
+from.
+
+Subclasses must define the following functions:
+    _run_locally_internal()
+    _get_workflow()
+    _get_awe_output()
+See below on specific documentation on how to use them.
+'''
 class Service:
 
     def __init__(self, config, ctx, cleanup=True):
         self.config = config
         self.ctx = ctx
+        # whether to delete temp files
+        # set to False for debugging
         self.cleanup = cleanup
 
     def run_locally(self, options, handle_files):
@@ -46,6 +61,15 @@ class Service:
 
         return handles
 
+    '''Performs algorithm or calls external program to perform algorithm.
+
+    params:
+        options - command line options passed to the algorithm
+        file_list - list of file names
+
+    returns:
+        list of result file names
+    '''
     def _run_locally_internal(self, options, file_list):
         pass
 
@@ -77,6 +101,15 @@ class Service:
 
         return jobid
 
+    '''Provides workflow document for use by AWE
+    
+    params:
+        options - command line options
+        handle_files - names of handle files
+
+    returns:
+        workflow document name
+    '''
     def _get_workflow(self, options, handle_files):
         pass
 
@@ -111,6 +144,14 @@ class Service:
 
         return status, output_handles
 
+    '''Returns file handles to results of workflow run by AWE
+
+    params:
+        obj - dictionary derived retrieved from JSON-formatted url
+    
+    returns:
+       file handles as dictionaries (NOT as files or file names) 
+    '''
     def _get_awe_output(self, obj):
         pass
 
@@ -140,7 +181,8 @@ class Classifier(Service):
         hier_out = mktemp(suffix=".hier", dir=TEMP_DIR)
         class_out = mktemp(suffix=".classified", dir=TEMP_DIR)
 
-        args = ["java", self.config.get(SERVICE_NAME, "classifier-memory"), "-jar"]
+        args = ["java", self.config.get(SERVICE_NAME, "classifier-memory"), 
+                "-jar"]
         args.append("classifier.jar")
         args.append(self.config.get(SERVICE_NAME, "classifier-subcommand"))
         args.extend(options)
@@ -176,7 +218,8 @@ class ProbeMatch(Service):
     def _run_locally_internal(self, options, file_list):
         out = mktemp(suffix=".probematch", dir=TEMP_DIR)
 
-        args = ["java", self.config.get(SERVICE_NAME, "probematch-memory"), "-jar"]
+        args = ["java", self.config.get(SERVICE_NAME, "probematch-memory"), 
+                "-jar"]
         args.append("ProbeMatch.jar")
         args.extend(options)
         args.extend(["-o", out])
@@ -208,7 +251,8 @@ class SeqMatch(Service):
     def _run_locally_internal(self, options, file_list):
         out = mktemp(suffix=".seqmatch", dir=TEMP_DIR)
     
-        args = ["java", self.config.get(SERVICE_NAME, "seqmatch-memory"), "-jar"]
+        args = ["java", self.config.get(SERVICE_NAME, "seqmatch-memory"), 
+                "-jar"]
         args.append("SequenceMatch.jar")
         args.append("seqmatch")
         args.extend(["-o", out])

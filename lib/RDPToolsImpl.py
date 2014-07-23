@@ -31,7 +31,9 @@ of DNA sequences.
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
         if not os.path.exists(os.path.abspath(CONFIG_FILE)):
-            raise Exception("config file does not exist: " + os.path.abspath(CONFIG_FILE))
+            raise Exception(
+                      "config file does not exist: " + 
+                      os.path.abspath(CONFIG_FILE))
 
         self.this_config = ConfigParser.ConfigParser()
         self.this_config.read(CONFIG_FILE)
@@ -159,7 +161,8 @@ of DNA sequences.
         # return variables are: jobid
         #BEGIN probematch_submit
 
-        probematch = RDPToolsService.ProbeMatch(self.this_config, self.ctx, False)
+        probematch = RDPToolsService.ProbeMatch(
+                         self.this_config, self.ctx, False)
         jobid = probematch.submit_awe(options, [primers, ref_file])
 
         #END probematch_submit
