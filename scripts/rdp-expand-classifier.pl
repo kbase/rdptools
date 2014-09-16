@@ -22,7 +22,8 @@ my($opt, $usage) = describe_options("%c %o input-handle-list",
 				    ["output|o=s", "write the output to this file"],
 				    ["conf|c=s", 'confidence cutoff', { default => 0.8 }],
 				    ["format|f=s", "output format", { default => 'allrank' }],
-				    ["gene|g=s", "gene", { default => '16srrna' }]);
+				    ["gene|g=s", "gene", { default => '16srrna' }],
+                                    ["token|t=s", "data authentification token"]);
 
 my $templ = Template->new({ ABSOLUTE => 1 });
 
@@ -67,9 +68,8 @@ my %vars = (parameters => $params,
 	    user => $user,
 	    shockurl => $shock_url,
 	    project => $project,
+            token => $opt->token
     );
-
-print STDERR "Expand: " . Dumper($template_file, $opt, \%ENV);
 
 if ($opt->output)
 {

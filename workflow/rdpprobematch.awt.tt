@@ -1,0 +1,36 @@
+{
+	"info": {
+            "pipeline": "awe-example",
+            "name": "[% jobname %]",
+            "project": "[% project %]",
+            "user": "[% user %]",
+            "clientgroups":"kbase",
+            "noretry": true
+        },
+	"tasks": [
+	    {
+                "cmd": {
+                    "args": "[% parameters %] [% primer_file %] [% query_file %]",
+                    "description": "show",
+                    "name": "awe_rdpprobematch"
+                },
+                "dependsOn": [],
+                "inputs": {
+                    "[% primer_handle.file_name %]": {
+                        "host": "[% primer_handle.url %]",
+                        "node": "[% primer_handle.id %]"
+                    },
+                    "[% query_handle.file_name %]": {
+                        "host": "[% query_handle.url %]",
+                        "node": "[% query_handle.id %]"
+                    }
+                },
+                "outputs": {
+                    "[% output_file %]": {
+                        "host": "http://[% shockurl %]"
+                    }
+                },
+                "taskid": "0"
+            }
+	]
+    }

@@ -1,0 +1,12 @@
+#![% kb_runtime %]/bin/perl -w
+
+my $command = "[% kb_runtime %]/java/bin/java -jar [% kb_top %]/lib/classifier.jar merge-count ";
+
+foreach (@ARGV) {
+    $command = $command . $_;
+    $command = $command . ' ';
+}
+
+#!system ("[% kb_runtime %]/java/bin/java", "[% mem_option %]", "-jar", "[% kb_top %]/lib/classifier.jar", "merge-count", @ARGV)
+!system($command)
+  or die " could not run classifier.jar";
